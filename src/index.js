@@ -14,7 +14,7 @@ app.post('/account', (req, res) => {
   const customerAlreadyExists = customers.some((customer) => customer.cpf === cpf)
   
   if(customerAlreadyExists){
-    return res.status(401).send({ error: "Ops! We have a problem" })
+    return res.status(401).send({ error: "cUSTOMER ALREADY EXIST" })
   }
   
   customers.push({
@@ -32,7 +32,11 @@ app.get('/statement/:cpf', (req, res) => {
 
   const customer = customers.find((customer) => customer.cpf === cpf)
 
-  return res.json(customer.statement)
+  if(!customer){
+    return res.status(400).json({ error: "Customer not found!" })
+  }
+
+  return res.json(customer.statement);
 });
 
 const port = process.env.PORT || 8080 

@@ -22,6 +22,17 @@ function verifyIfExistsAccountCPF(req, res, next){
   return next();
 }
 
+function getBalance(statement) {
+  const balance = statement.reduce((acc, operation) => {
+    if(operation.type === 'credit'){
+      return acc + operation.amount
+    } else {
+      return acc - operation.amount
+    }
+  }, 0);
+
+  return balance
+}
 
 app.post('/account', (req, res) => {
   const { cpf, name } = req.body;
@@ -29,7 +40,7 @@ app.post('/account', (req, res) => {
   const customerAlreadyExists = customers.some((customer) => customer.cpf === cpf)
   
   if(customerAlreadyExists){
-    return res.status(401).send({ error: "cUSTOMER ALREADY EXIST" })
+    return res.status(401).send({ error: "Customer already exists!!" })
   }
   
   customers.push({
@@ -64,6 +75,30 @@ app.get('/statement/:cpf', verifyIfExistsAccountCPF, (req, res) => {
 
   return res.json(customer.statement);
 });
+
+app.post("/withdraw/:cpf", verifyIfExistsAccountCPF, (req, res) => {
+  const { amount } = req.body;
+  const { customer } = request;
+
+  const balance = getBalance(customer.statement)
+
+  if(balance < amount){
+    return res.status(400).json({ error: "Insufficient funds, please try again!" })
+  }
+
+  const statementOperation = {
+    amount,
+    created_at: new Date(),
+    type: "credit",
+  }
+
+  customer.statement.push(statementOperation)
+
+  return res.status(201).json({ message: "success" })
+
+})
+
+
 
 const port = process.env.PORT || 8080 
 app.listen(port, () => console.log(`Server is working at ${port}`))

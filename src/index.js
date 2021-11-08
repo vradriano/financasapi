@@ -76,7 +76,7 @@ app.get('/statement/:cpf', verifyIfExistsAccountCPF, (req, res) => {
   return res.json(customer.statement);
 });
 
-app.post("/withdraw/:cpf", verifyIfExistsAccountCPF, (req, res) => {
+app.post('/withdraw/:cpf', verifyIfExistsAccountCPF, (req, res) => {
   const { amount } = req.body;
   const { customer } = request;
 
@@ -98,6 +98,17 @@ app.post("/withdraw/:cpf", verifyIfExistsAccountCPF, (req, res) => {
 
 })
 
+app.get('/statement/date', verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = request; 
+  const { date } = req.query
+
+  const dateFormat = new Date(date + " 00:00")
+
+  const statement = customer.statement.filter((statement) => statement.created_at.toDateString() === new Date(dateFormat).toDateString())
+
+
+  return res.json(statement);
+});
 
 
 const port = process.env.PORT || 8080 

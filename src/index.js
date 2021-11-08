@@ -119,5 +119,11 @@ app.put('/account', verifyIfExistsAccountCPF, (req, res) => {
   return res.status(201).json({ success: "Name changed with success!"})
 })
 
+app.get('/account', verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = request;
+
+  return res.json(customer)
+})
+
 const port = process.env.PORT || 8080 
 app.listen(port, () => console.log(`Server is working at ${port}`))

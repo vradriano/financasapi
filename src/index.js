@@ -133,5 +133,14 @@ app.delete('/account', verifyIfExistsAccountCPF, (req, res) => {
   return res.status(201).json({ success: "Deleted!"})
 })
 
+app.get('/balance', verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = request;
+
+  const balance = getBalance(customer.statement)
+
+  return res.json(balance)
+});
+
+
 const port = process.env.PORT || 8080 
 app.listen(port, () => console.log(`Server is working at ${port}`))

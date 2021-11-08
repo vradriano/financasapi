@@ -9,7 +9,7 @@ app.use(express.json())
 const customers = [];
 
 function verifyIfExistsAccountCPF(req, res, next){
-  const { cpf } = req.params
+  const { cpf } = req.query
 
   const customer = customers.find((customer) => customer.cpf === cpf)
 
@@ -53,7 +53,7 @@ app.post('/account', (req, res) => {
   return res.status(201).send();
 });
 
-app.post('/deposit/:cpf', verifyIfExistsAccountCPF, (req, res) => {
+app.post('/deposit/', verifyIfExistsAccountCPF, (req, res) => {
   const { description, amount } = req.body
   
   const { customer } = request; 
@@ -70,13 +70,13 @@ app.post('/deposit/:cpf', verifyIfExistsAccountCPF, (req, res) => {
     return res.status(201).send()
 })
 
-app.get('/statement/:cpf', verifyIfExistsAccountCPF, (req, res) => {
+app.get('/statement/', verifyIfExistsAccountCPF, (req, res) => {
   const { customer } = request; 
 
   return res.json(customer.statement);
 });
 
-app.post('/withdraw/:cpf', verifyIfExistsAccountCPF, (req, res) => {
+app.post('/withdraw/', verifyIfExistsAccountCPF, (req, res) => {
   const { amount } = req.body;
   const { customer } = request;
 
@@ -98,7 +98,7 @@ app.post('/withdraw/:cpf', verifyIfExistsAccountCPF, (req, res) => {
 
 })
 
-app.get('/statement/date', verifyIfExistsAccountCPF, (req, res) => {
+app.get('/statement/date', verifyIfExistsAccountCPF, (req, res) => {  
   const { customer } = request; 
   const { date } = req.query
 
@@ -123,6 +123,14 @@ app.get('/account', verifyIfExistsAccountCPF, (req, res) => {
   const { customer } = request;
 
   return res.json(customer)
+})
+
+app.delete('/account', verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = request;
+
+  customers.splice(customer, 1);
+
+  return res.status(201).json({ success: "Deleted!"})
 })
 
 const port = process.env.PORT || 8080 

@@ -1,4 +1,2 @@
 # financasapi
 
-
-bem vindo

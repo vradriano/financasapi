@@ -14,6 +14,8 @@ Opção de alterar o nome do titular da conta,
 <br>
 Possibilidade de excluir conta.
 
+<hr>
+
 #### Requisitos
 [✓] Deve ser possível criar uma conta
 <br>
@@ -31,6 +33,8 @@ Possibilidade de excluir conta.
 <br>
 [✓] Deve ser possível deletar uma conta
 
+<hr>
+
 #### Regras de negócio
 [✓] Não deve ser possível cadastrar uma conta com CPF já existente
 <br>
@@ -44,11 +48,8 @@ Possibilidade de excluir conta.
 <br>
 [✓] Não deve ser possível fazer saque quando o saldo for insuficiente
 
+<hr>
+
 ### Tecnologias utilizadas:
 Javascript,
 NodeJS.
-
-#### Em funcionamento:
-
-
-
